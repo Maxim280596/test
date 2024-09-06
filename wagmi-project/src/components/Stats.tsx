@@ -59,7 +59,8 @@ function Stats() {
     if (poolAddress != "0x0000000000000000000000000000000000000000") {
       const poolId = await readContract(config, {
         abi: WEIGHTED_POOL_ABI,
-        address: poolAddress,
+        // @ts-ignore
+        address: poolAddress as string,
         functionName: "getPoolId",
         args: [],
         chainId: sepolia.id,
@@ -67,6 +68,7 @@ function Stats() {
       console.log(poolId, "poolId");
       const weights: any = await readContract(config, {
         abi: WEIGHTED_POOL_ABI,
+        // @ts-ignore
         address: poolAddress,
         functionName: "getNormalizedWeights",
         args: [],
@@ -150,7 +152,7 @@ function Stats() {
         unit: "ether",
       });
       setEthBalance(balance.formatted);
-
+      // @ts-ignore
       const gtBalance: bigint = await readContract(config, {
         abi: tokenAbi,
         address: GAME_TOKEN_ADDRESS,

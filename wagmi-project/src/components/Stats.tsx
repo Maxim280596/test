@@ -66,39 +66,41 @@ function Stats() {
         chainId: sepolia.id,
       });
       console.log(poolId, "poolId");
-      const weights: any = await readContract(config, {
-        abi: WEIGHTED_POOL_ABI,
-        // @ts-ignore
-        address: poolAddress,
-        functionName: "getNormalizedWeights",
-        args: [],
-        chainId: sepolia.id,
-      });
-      console.log(weights, "weights");
-      const poolTokens: any = await readContract(config, {
-        abi: VAULT_ABI,
-        address: VAULT,
-        functionName: "getPoolTokens",
-        args: [poolId],
-        chainId: sepolia.id,
-      });
-      console.log(poolTokens, "poolTokens");
-      setWethBalanceInPool(formatUnits(poolTokens[1][1], 18));
-      setGtBalanceInPool(formatUnits(poolTokens[1][0], 18));
-      const oneEthPrice =
-        (parseUnits("1", 18) * poolTokens[1][0]) / poolTokens[1][1];
-      const oneGTPrice =
-        (parseUnits("1", 18) * poolTokens[1][1]) / poolTokens[1][0];
-      console.log(oneEthPrice.toString(), "oneEthPrice");
+      if (poolAddress) {
+        const weights: any = await readContract(config, {
+          abi: WEIGHTED_POOL_ABI,
+          // @ts-ignore
+          address: poolAddress,
+          functionName: "getNormalizedWeights",
+          args: [],
+          chainId: sepolia.id,
+        });
+        console.log(weights, "weights");
+        const poolTokens: any = await readContract(config, {
+          abi: VAULT_ABI,
+          address: VAULT,
+          functionName: "getPoolTokens",
+          args: [poolId],
+          chainId: sepolia.id,
+        });
+        console.log(poolTokens, "poolTokens");
+        setWethBalanceInPool(formatUnits(poolTokens[1][1], 18));
+        setGtBalanceInPool(formatUnits(poolTokens[1][0], 18));
+        const oneEthPrice =
+          (parseUnits("1", 18) * poolTokens[1][0]) / poolTokens[1][1];
+        const oneGTPrice =
+          (parseUnits("1", 18) * poolTokens[1][1]) / poolTokens[1][0];
+        console.log(oneEthPrice.toString(), "oneEthPrice");
+        setEthPrice(formatUnits(oneGTPrice, 18));
+        setGtPrice(formatUnits(oneEthPrice, 18));
+      }
+
       //   const gtCalculation = poolTokens[1][0] * weights[0];
       //   const wethCalculation = poolTokens[1][1] * weights[1];
       //   const wethToGTprice = wethCalculation / gtCalculation;
       //   const gtToWETHprice = gtCalculation / wethCalculation;
       //   console.log(wethToGTprice, "wethToGTprice");
       //   console.log(gtToWETHprice, "gtToWETHprice");
-
-      setEthPrice(formatUnits(oneGTPrice, 18));
-      setGtPrice(formatUnits(oneEthPrice, 18));
     }
     // const pool = await ethers.getContractAt(
     //     WEIGHTED_POOL_ABI,
@@ -168,9 +170,7 @@ function Stats() {
     updateGameStats();
   }, []);
 
-  useEffect(() => {
-    console.log("Yields updated:", yields);
-  }, [yields]);
+  useEffect(() => {}, [yields]);
 
   return (
     <div className="g-container">

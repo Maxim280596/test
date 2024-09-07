@@ -90,7 +90,7 @@ function Stats() {
           (parseUnits("1", 18) * poolTokens[1][0]) / poolTokens[1][1];
         const oneGTPrice =
           (parseUnits("1", 18) * poolTokens[1][1]) / poolTokens[1][0];
-        console.log(oneEthPrice.toString(), "oneEthPrice");
+        console.log(oneEthPrice.toString(), "oneEthPrices");
         setEthPrice(formatUnits(oneGTPrice, 18));
         setGtPrice(formatUnits(oneEthPrice, 18));
       }
